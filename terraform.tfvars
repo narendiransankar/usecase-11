@@ -1,10 +1,8 @@
-region             = "ap-south-1"
-trail_bucket_name  = "my-unique-trail-bucket-narendiran"
-sns_topic_name     = "ConsoleLoginNotifications"
-notification_email = "narendiran.sankar@hcltech.com"
-log_group_name     = "/aws/cloudtrail/console-login"
-log_retention_days = 90
-metric_name        = "ConsoleLoginCount"
-metric_namespace   = "CloudTrailMetrics"
-alarm_name         = "ConsoleLoginAlarm"
-trail_name         = "console-login-trail"
+cloud_trail_bucket_name = "narendiran-cloudtrail-logs-bucket"
+project_tag = {
+  Environment = "dev"
+  Project     = "aws_cloudtrail_event"
+  Owner       = "dev-team"
+}
+cloud_trail_name = "narendiran-cloudtrail"
+aws_region = "ap-south-1"
