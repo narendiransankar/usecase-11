@@ -28,5 +28,6 @@ module "cloudtrail" {
   s3_bucket     = module.s3.bucket_id
   #log_group_arn = module.cloudwatch.log_group_arn
   log_group_name = module.cloudwatch.log_group_name
-  region         = var.region  
+  region         = var.region 
+  depends_on = [aws_iam_role_policy.cloudtrail_cwlogs]
 }
