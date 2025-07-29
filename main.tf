@@ -28,5 +28,5 @@ module "cloudtrail" {
   s3_bucket     = module.s3.bucket_id
   #log_group_arn = module.cloudwatch.log_group_arn
   log_group_name = module.cloudwatch.log_group_name
-  log_group_depends_on = module.cloudwatch.log_group_arn
+  region         = var.region  
 }
