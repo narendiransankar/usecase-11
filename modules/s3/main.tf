@@ -1,20 +1,34 @@
-resource "aws_s3_bucket" "this" {
-  bucket = var.bucket_name
-  force_destroy = true
-  tags = var.tags
+resource "aws_s3_bucket" "log_bucket" {
+  bucket = var.cloud_trail_bucket_name
+  tags  = var.project_tag
+}
+resource "aws_s3_bucket_policy" "log_bucket_policy" {
+  bucket = aws_s3_bucket.log_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect    = "Allow"
+        Action    = "s3:PutObject"
+        Resource  = "${aws_s3_bucket.log_bucket.arn}/*"
+        Principal = {
+          Service = "cloudtrail.amazonaws.com"
+        }
+      },
+      {
+        Effect    = "Allow"
+        Action    = "s3:GetBucketAcl"
+        Resource  = "${aws_s3_bucket.log_bucket.arn}"
+        Principal = {
+          Service = "cloudtrail.amazonaws.com"
+        }
+      }
+    ]
+  })
 }
 
-resource "aws_s3_bucket_public_access_block" "this" {
-  bucket                  = aws_s3_bucket.this.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_versioning" "this" {
-  bucket = aws_s3_bucket.this.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
+#resource "aws_s3_bucket_acl" "log_bucket_acl" {
+#  bucket = aws_s3_bucket.log_bucket.bucket
+#  acl    = "private" 
+#}
