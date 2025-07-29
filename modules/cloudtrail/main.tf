@@ -17,7 +17,6 @@ resource "aws_iam_role" "cloudtrail_cwlogs" {
 }
 
 resource "aws_iam_role_policy" "cloudtrail_cwlogs" {
-  ...
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
