@@ -1,0 +1,10 @@
+variable "region" { type = string }
+variable "trail_bucket_name" { type = string }
+variable "sns_topic_name" { type = string }
+variable "notification_email" { type = string }
+variable "log_group_name" { type = string }
+variable "log_retention_days" { type = number }
+variable "metric_name" { type = string }
+variable "metric_namespace" { type = string }
+variable "alarm_name" { type = string }
+variable "trail_name" { type = string }
