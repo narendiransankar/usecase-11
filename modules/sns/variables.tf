@@ -1,2 +1,4 @@
-variable "topic_name" { type = string }
-variable "email" { type = string }
+variable "project_tag" {
+description = "The project_tag for this project"
+type = map(string)
+}
