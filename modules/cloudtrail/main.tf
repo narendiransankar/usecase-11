@@ -17,6 +17,8 @@ resource "aws_iam_role" "cloudtrail_cwlogs" {
 }
 
 resource "aws_iam_role_policy" "cloudtrail_cwlogs" {
+  name = "${var.trail_name}-cwlogs"
+  role = aws_iam_role.cloudtrail_cwlogs.id
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
