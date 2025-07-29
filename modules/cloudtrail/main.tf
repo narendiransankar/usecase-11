@@ -44,5 +44,5 @@ resource "aws_cloudtrail" "this" {
   cloud_watch_logs_group_arn    = local.log_group_arn   
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_cwlogs.arn
 
-  depends_on = [aws_iam_role_policy.cloudtrail_cwlogs]
+  depends_on = [aws_iam_role_policy.cloudtrail_cwlogs,aws_cloudwatch_log_group.this]
 }
