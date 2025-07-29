@@ -1,33 +1,39 @@
-
-
 module "s3" {
-  source      = "./modules/s3"
-  bucket_name = var.trail_bucket_name
-  tags        = { Name = var.trail_bucket_name }
+source = "./modules/terraform-aws-s3"
+cloud_trail_bucket_name = var.cloud_trail_bucket_name
+project_tag = var.project_tag
 }
+
+
+
+module "cloud_trail" {
+source = "./modules/terraform-aws-cloudtrail"
+cloud_trail_bucket_name =var.cloud_trail_bucket_name
+cloud_trail_name = var.cloud_trail_name
+project_tag = var.project_tag
+cloud_watch_logs_group_arn = module.cloud_watch.cloud_watch_logs_group_arn
+ depends_on = [module.cloud_watch , module.s3]
+ aws_region = var.aws_region
+}
+
+
+module "cloud_watch" {
+source = "./modules/terraform-aws-cloudwatch"
+sns_topic_arn = module.sns.sns_topic_arn
+project_tag = var.project_tag
+  metric_name    = var.metric_name
+  metric_namespace = var.metric_namespace
+  alarm_name     = var.alarm_name
+  alarm_description = var.alarm_description
+  statistic      = var.statistic
+  period         = var.period
+  evaluation_periods = var.evaluation_periods
+  threshold      = var.threshold
+  comparison_operator = var.comparison_operator
+}
+
 
 module "sns" {
-  source     = "./modules/sns"
-  topic_name = var.sns_topic_name
-  email      = var.notification_email
-}
-
-module "cloudwatch" {
-  source           = "./modules/cloudwatch"
-  log_group_name   = var.log_group_name
-  retention        = var.log_retention_days
-  metric_name      = var.metric_name
-  metric_namespace = var.metric_namespace
-  alarm_name       = var.alarm_name
-  sns_topic_arn    = module.sns.topic_arn
-}
-
-module "cloudtrail" {
-  source        = "./modules/cloudtrail"
-  trail_name    = var.trail_name
-  s3_bucket     = module.s3.bucket_id
-  #log_group_arn = module.cloudwatch.log_group_arn
-  log_group_name = module.cloudwatch.log_group_name
-  region         = var.region 
-  depends_on = [aws_iam_role_policy.cloudtrail_cwlogs]
+source = "./modules/terraform-aws-sns"
+project_tag = var.project_tag
 }
