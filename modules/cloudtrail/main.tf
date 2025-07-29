@@ -33,4 +33,5 @@ resource "aws_cloudtrail" "this" {
   enable_logging                = true
   cloud_watch_logs_group_arn    = var.log_group_arn
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_cwlogs.arn
+  depends_on = [var.log_group_depends_on]
 }
