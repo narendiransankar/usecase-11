@@ -17,15 +17,14 @@ resource "aws_iam_role" "cloudtrail_cwlogs" {
 }
 
 resource "aws_iam_role_policy" "cloudtrail_cwlogs" {
-  name = "${var.trail_name}-cwlogs"
-  role = aws_iam_role.cloudtrail_cwlogs.id
+  ...
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow",
-        Action   = ["logs:CreateLogStream", "logs:PutLogEvents"],
-        Resource = "${var.log_group_arn}:log-stream:*"
+        Effect = "Allow",
+        Action = ["logs:CreateLogStream", "logs:PutLogEvents"],
+        Resource = "${local.log_group_arn}:log-stream:*"
       }
     ]
   })
@@ -37,7 +36,8 @@ resource "aws_cloudtrail" "this" {
   include_global_service_events = true
   is_multi_region_trail         = true
   enable_logging                = true
-  cloud_watch_logs_group_arn    = var.log_group_arn
+  cloud_watch_logs_group_arn    = local.log_group_arn   
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_cwlogs.arn
-  depends_on = [var.log_group_depends_on]
+
+  depends_on = [aws_iam_role_policy.cloudtrail_cwlogs]
 }
