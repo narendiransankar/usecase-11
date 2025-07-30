@@ -11,7 +11,7 @@ resource "aws_cloudwatch_log_metric_filter" "login_filter" {
   metric_transformation {
     name      = var.metric_name
     namespace = var.metric_namespace
-    value     = "1"
+    value     = "5"
   }
 }
 
